@@ -1,32 +1,51 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    <h1>根组件 {{ count }}</h1>
+    <input :value="count" type="text" @input="handleInput">
+    <add-item></add-item>
+    <hr>
+    <sub-item></sub-item>
   </div>
 </template>
 
-<style lang="less">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import { mapState, mapMutations } from 'vuex'
+import AddItem from './components/add-item.vue'
+import SubItem from './components/sub-item.vue'
+// this.$store.state.count
 
-#nav {
-  padding: 30px;
+export default {
+  name: 'app',
+  data: function () {
+    return {
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
     }
+  },
+  computed: {
+    ...mapState(['count'])
+  },
+  methods: {
+    ...mapMutations(['inputCount']),
+    handleInput (e) {
+      // 获取输入框的值
+      const value = +e.target.value
+      // 将值提交给vuex, 进行修改
+      this.inputCount(value)
+    }
+  },
+  components: {
+    AddItem,
+    SubItem
   }
+}
+</script>
+
+<style>
+#app {
+  width: 300px;
+  margin: 20px auto;
+  border: 3px solid #ccc;
+  border-radius: 3px;
+  padding: 10px;
 }
 </style>
